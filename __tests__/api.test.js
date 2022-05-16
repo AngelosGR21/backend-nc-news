@@ -105,7 +105,7 @@ describe("PATCH /api/articles/:article_id && Testing error handling", () => {
             expect(message).toBe("Some values are missing");
         })
     })
-    test("400 ~ Bad request (id passed is invalid)", () => {
+    test("404 ~ Bad request (id passed is invalid)", () => {
         const votesObj = {inc_votes : 3};
         return request(app).patch("/api/articles/9999").send(votesObj).expect(404).then((res) => {
             const { message } = res.body;
