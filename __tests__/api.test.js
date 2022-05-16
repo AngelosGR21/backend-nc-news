@@ -122,6 +122,22 @@ describe("PATCH /api/articles/:article_id && Testing error handling", () => {
     })
 })
 
+describe("GET /api/users", () => {
+    test("Returns an array of user objects, each with the properties ~ username, name and avatar", () => {
+        return request(app).get("/api/users").expect(200).then((res) => {
+            const {users} = res.body;
+            expect(users).toHaveLength(4);
+            users.forEach((user) => {
+                expect(user).toMatchObject({
+                    username: expect.any(String),
+                    name: expect.any(String),
+                    avatar_url: expect.any(String)
+                })
+            })
+        })
+    })
+})
+
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {
         return request(app).get("/api/topicsss").expect(404).then((res) => {
