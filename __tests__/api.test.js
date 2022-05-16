@@ -56,12 +56,71 @@ describe("GET /api/articles/:article_id && Testing error handling", () => {
     test("Returns 400 when a wrong data type was inserted", () => {
         return request(app).get("/api/articles/testingEndpoint").expect(400).then((res) => {
             const { message } = res.body
-            
+
             expect(message).toBe("Bad request");
         })
     })
 })
 
+describe("PATCH /api/articles/:article_id && Testing error handling", () => {
+    test("Increments the total number of votes", () => {
+        const votesObj = { inc_votes : 5 };
+        return request(app).patch("/api/articles/1").send(votesObj).expect(200).then((res) => {
+            const { updatedArticle } = res.body;
+            expect(updatedArticle).toMatchObject({
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 105,
+            })
+        })
+    })
+    test("Decrements the total number of votes", () => {
+        const votesObj = { inc_votes : -5 };
+        return request(app).patch("/api/articles/1").send(votesObj).expect(200).then((res) => {
+            const { updatedArticle } = res.body;
+            expect(updatedArticle).toMatchObject({
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 95,
+            })
+        })
+    })
+    test("400 ~ Bad request (wrong data type inserted)", () => {
+        const votesObj = {inc_votes : "Test"};
+        return request(app).patch("/api/articles/1").send(votesObj).expect(400).then((res) => {
+            const { message } = res.body;
+            expect(message).toBe("Bad request");
+        })
+    })
+    test("400 ~ Bad request (values missing)", () => {
+        const votesObj = {randomKey : 3};
+        return request(app).patch("/api/articles/1").send(votesObj).expect(400).then((res) => {
+            const { message } = res.body;
+            expect(message).toBe("Some values are missing");
+        })
+    })
+    test("400 ~ Bad request (id passed is invalid)", () => {
+        const votesObj = {inc_votes : 3};
+        return request(app).patch("/api/articles/9999").send(votesObj).expect(404).then((res) => {
+            const { message } = res.body;
+            expect(message).toBe("Article was not found");
+        })
+    })
+    test("400 ~ Bad request (when a wrong data type was inserted)", () => {
+        const votesObj = {inc_votes : 3};
+        return request(app).patch("/api/articles/testingEndpoint").send(votesObj).expect(400).then((res) => {
+            const { message } = res.body
+
+            expect(message).toBe("Bad request");
+        })
+    })
+})
 
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {
