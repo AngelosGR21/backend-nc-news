@@ -2,9 +2,9 @@
 
 ## Setup
 
-In order for the application to work, we need to create 2 .env files in the root of our folder :
+In order for the application to work, you need to create 2 .env files in the root of our folder :
 
 * .env.test
 * .env.development
 
-Afterwards we create a variable with the name ***PGDATABASE*** and the value of the name of each database. (See ***setup.sql*** file inside the ***db*** folder)
+Afterwards, you create the variable ***PGDATABASE=nc_news*** (for .env.development) and ***PGDATABASE=nc_news_test*** (for .env.test)
