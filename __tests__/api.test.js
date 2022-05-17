@@ -46,6 +46,12 @@ describe("GET /api/articles/:article_id && Testing error handling", () => {
             })
         })
     })
+    test("Checks for the key comment_count, with the total count of comments", () => {
+        return request(app).get("/api/articles/1").expect(200).then((res) => {
+            const {article} = res.body;
+            expect(article).toHaveProperty("comment_count", 11);
+        })
+    })
     test("Returns 404 when the article with the id specified was not found", () => {
         return request(app).get("/api/articles/9999").expect(404).then((res) => {
             const { message } = res.body;

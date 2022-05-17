@@ -2,11 +2,16 @@ const db = require("../db/connection");
 
 
 exports.fetchArticle = (id) => {
-    return db.query('SELECT * FROM articles WHERE article_id = $1', [id]).then((res) => {
-        if(!res.rowCount){
+    const promises = [db.query("SELECT * FROM comments WHERE article_id = $1", [id]), 
+    db.query('SELECT * FROM articles WHERE article_id = $1', [id])]
+
+    return Promise.all(promises).then(([comments, article]) => {
+        if(!article.rowCount){
             return Promise.reject({status : 404, message : "Article was not found"})
         }
-        return res.rows[0];
+        const finalArticle = article.rows[0]
+        finalArticle.comment_count = comments.rowCount;
+        return finalArticle;
     })
 }
 
