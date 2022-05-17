@@ -2,17 +2,17 @@ const db = require("../db/connection");
 
 
 exports.fetchArticle = (id) => {
-    const promises = [db.query("SELECT * FROM comments WHERE article_id = $1", [id]), 
-    db.query('SELECT * FROM articles WHERE article_id = $1', [id])]
 
-    return Promise.all(promises).then(([comments, article]) => {
-        if(!article.rowCount){
+    return db.query(`SELECT articles.article_id, articles.title, articles.topic, articles.author, 
+    articles.body, articles.created_at, articles.votes, COUNT(*) AS comment_count FROM comments RIGHT JOIN articles 
+    ON articles.article_id = comments.article_id WHERE articles.article_id = $1 
+    GROUP BY articles.article_id, articles.title, articles.topic, articles.author, articles.body,
+     articles.created_at, articles.votes`, [id]).then(({rows}) => {
+        if(!rows.length){
             return Promise.reject({status : 404, message : "Article was not found"})
         }
-        const finalArticle = article.rows[0]
-        finalArticle.comment_count = comments.rowCount;
-        return finalArticle;
-    })
+            return rows[0];
+     })
 }
 
 exports.updateArticle = (id, votes) => {
