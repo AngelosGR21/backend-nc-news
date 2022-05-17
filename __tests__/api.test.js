@@ -34,16 +34,21 @@ describe("GET /api/articles/:article_id && Testing error handling", () => {
     test("Returns an object with the article found, the article should contain all 6 properties", () => {
         return request(app).get("/api/articles/1").expect(200).then((res) => {
             const { article } = res.body;
-
             expect(article).toMatchObject({
-                author : expect.any(String),
-                title : expect.any(String),
-                article_id : expect.any(Number),
-                body : expect.any(String),
-                topic : expect.any(String),
-                created_at : expect.any(String),
-                votes : expect.any(Number)
+                author : "butter_bridge",
+                title : "Living in the shadow of a great man",
+                article_id : 1,
+                body : "I find this existence challenging",
+                topic : "mitch",
+                created_at : "2020-07-09T20:11:00.000Z",
+                votes : 100,
             })
+        })
+    })
+    test("Checks for the key comment_count, with the total count of comments", () => {
+        return request(app).get("/api/articles/1").expect(200).then((res) => {
+            const {article} = res.body;
+            expect(article).toHaveProperty("comment_count", "11");
         })
     })
     test("Returns 404 when the article with the id specified was not found", () => {
