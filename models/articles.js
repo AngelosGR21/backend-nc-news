@@ -6,8 +6,7 @@ exports.fetchArticle = (id) => {
     return db.query(`SELECT articles.article_id, articles.title, articles.topic, articles.author, 
     articles.body, articles.created_at, articles.votes, COUNT(*) AS comment_count FROM comments RIGHT JOIN articles 
     ON articles.article_id = comments.article_id WHERE articles.article_id = $1 
-    GROUP BY articles.article_id, articles.title, articles.topic, articles.author, articles.body,
-     articles.created_at, articles.votes`, [id]).then(({rows}) => {
+    GROUP BY articles.article_id`, [id]).then(({rows}) => {
         if(!rows.length){
             return Promise.reject({status : 404, message : "Article was not found"})
         }
