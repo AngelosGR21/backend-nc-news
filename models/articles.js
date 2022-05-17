@@ -22,3 +22,11 @@ exports.updateArticle = (id, votes) => {
             return res.rows[0];
         })
 }
+
+exports.fetchAllArticles = () => {
+    return db.query(`SELECT articles.article_id, articles.title, articles.topic, articles.author, 
+    articles.created_at, articles.votes, COUNT(comments.article_id) AS comment_count FROM comments RIGHT JOIN articles 
+    ON articles.article_id = comments.article_id GROUP BY articles.article_id`).then(({rows}) => {
+        return rows;
+    })
+}
