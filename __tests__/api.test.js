@@ -147,7 +147,6 @@ describe("GET /api/articles", () => {
     test("Checking each each article structure", () => {
         return request(app).get("/api/articles").expect(200).then((res) => {
             const {articles} = res.body;
-            console.log(articles);
             expect(articles).toHaveLength(12);
             articles.forEach((article) => {
                 expect(article).toMatchObject({
