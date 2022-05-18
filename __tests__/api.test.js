@@ -208,7 +208,8 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
                 body: "This is a test",
                 author : "butter_bridge",
                 votes : 0,
-                created_at : expect.any(String)
+                created_at : expect.any(String),
+                comment_id : 19
             })
         })
     })
@@ -235,6 +236,13 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
         return request(app).post("/api/articles/99999/comments").send(testBody).expect(404).then((res) => {
             const {message} = res.body;
             expect(message).toBe("Article was not found")
+        })
+    })
+    test("404 - Username passed was not found", () => {
+        const testBody = {username: "dsadsadsadsa", body: "This is a test"};
+        return request(app).post("/api/articles/3/comments").send(testBody).expect(404).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("User was not found")
         })
     })
 })
