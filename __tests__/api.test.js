@@ -164,7 +164,7 @@ describe("GET /api/articles", () => {
 })
 
 describe("GET /api/articles/:article_id/comments && Testing error handling", () => {
-    test("Returns an array of comment objects", () => {
+    test("200 - Returns an array of comment objects", () => {
         return request(app).get("/api/articles/1/comments").expect(200).then((res) => {
             const {comments} = res.body;
             expect(comments).toHaveLength(11);
@@ -177,6 +177,12 @@ describe("GET /api/articles/:article_id/comments && Testing error handling", () 
                     body : expect.any(String)
                 })
             })
+        })
+    })
+    test("200 - article is a valid id in the db, but has no comments associated with it", () => {
+        return request(app).get("/api/articles/7/comments").expect(200).then((res) => {
+            const {comments} = res.body;
+            expect(comments).toHaveLength(0);
         })
     })
     test("400 - Bad request (passing incorrect data type)", () => {

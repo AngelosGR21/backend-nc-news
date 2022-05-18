@@ -32,13 +32,17 @@ exports.fetchAllArticles = () => {
 }
 
 exports.fetchCommentsById = (id) => {
-    if(!id){
-        return Promise.reject({status: 400, message: "Bad request"});
-    }
     return db.query('SELECT * FROM comments WHERE article_id = $1', [id]).then((res) => {
         if(!res.rowCount){
-            return Promise.reject({status : 404, message : "Article was not found"})
+            return this.fetchArticle(id)
+        }else{
+            return res.rows
         }
-        return res.rows;
+    }).then((res) => {
+        if(Array.isArray(res)){
+            return res;
+        }else{
+            return [];
+        }
     })
 }
