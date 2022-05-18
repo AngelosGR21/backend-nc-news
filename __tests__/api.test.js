@@ -163,6 +163,42 @@ describe("GET /api/articles", () => {
     })
 })
 
+describe("GET /api/articles/:article_id/comments && Testing error handling", () => {
+    test("200 - Returns an array of comment objects", () => {
+        return request(app).get("/api/articles/1/comments").expect(200).then((res) => {
+            const {comments} = res.body;
+            expect(comments).toHaveLength(11);
+            comments.forEach((comment) => {
+                expect(comment).toMatchObject({
+                    comment_id : expect.any(Number),
+                    votes : expect.any(Number),
+                    created_at : expect.any(String),
+                    author : expect.any(String),
+                    body : expect.any(String)
+                })
+            })
+        })
+    })
+    test("200 - article is a valid id in the db, but has no comments associated with it", () => {
+        return request(app).get("/api/articles/7/comments").expect(200).then((res) => {
+            const {comments} = res.body;
+            expect(comments).toHaveLength(0);
+        })
+    })
+    test("400 - Bad request (passing incorrect data type)", () => {
+        return request(app).get("/api/articles/test/comments").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Bad request");
+        })
+    })
+    test("404 - Not found (passing an inexistent id)", () => {
+        return request(app).get("/api/articles/9999/comments").expect(404).then((res) => {
+            const { message } = res.body;
+            expect(message).toBe("Article was not found");
+        })
+    })
+})
+
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {
         return request(app).get("/api/topicsss").expect(404).then((res) => {

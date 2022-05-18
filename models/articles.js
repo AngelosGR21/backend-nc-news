@@ -30,3 +30,19 @@ exports.fetchAllArticles = () => {
         return rows;
     })
 }
+
+exports.fetchCommentsById = (id) => {
+    return db.query('SELECT * FROM comments WHERE article_id = $1', [id]).then((res) => {
+        if(!res.rowCount){
+            return this.fetchArticle(id)
+        }else{
+            return res.rows
+        }
+    }).then((res) => {
+        if(Array.isArray(res)){
+            return res;
+        }else{
+            return [];
+        }
+    })
+}
