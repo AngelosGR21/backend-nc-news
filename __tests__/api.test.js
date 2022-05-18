@@ -205,10 +205,11 @@ describe("GET /api/articles", () => {
             expect(message).toBe("Invalid sort_by value");
         })
     })
-    test("404 - Setting invalid topic value", () => {
-        return request(app).get("/api/articles?topic=apples").expect(404).then((res) => {
+    test("400 - Setting invalid topic value", () => {
+
+        return request(app).get("/api/articles?topic=apples").expect(400).then((res) => {
             const {message} = res.body;
-            expect(message).toBe("No articles found");
+            expect(message).toBe("Invalid topic value");
         })
     })
 })
@@ -296,6 +297,7 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
         })
     })
 })
+
 
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {

@@ -50,7 +50,7 @@ exports.fetchAllArticles = ({sort_by = "created_at", order, topic}) => {
     
     return db.query(queryString, queryValues).then(({rows}) => {
         if(!rows.length){
-            return Promise.reject({status: 404, message: "No articles found"})
+            return Promise.reject({status: 400, message: "Invalid topic value"})
         }
         return rows;
     })
