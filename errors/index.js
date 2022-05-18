@@ -5,6 +5,12 @@ exports.psqlErrorHandler = (err, req, res, next) => {
         res.status(400).send({message: "Bad request"})
     }else if(err.code === "23502"){
         res.status(400).send({message : "Some values are missing"});
+    }else if(err.code === "23503"){
+        if(err.constraint === "comments_author_fkey"){
+            res.status(400).send({message : "Username does not exist"})
+        }else{
+            res.status(404).send({message : "Article was not found"})
+        }
     }else{
         next(err);
     }
