@@ -199,6 +199,54 @@ describe("GET /api/articles/:article_id/comments && Testing error handling", () 
     })
 })
 
+describe("POST /api/articles/:article_id/comments && Testing error handling", () => {
+    test("201 - Creates a new comment for the specified article", () => {
+        const testBody = {username: "butter_bridge", body: "This is a test"};
+        return request(app).post("/api/articles/7/comments").send(testBody).expect(201).then((res) => {
+            const { comment } = res.body;
+            expect(comment).toMatchObject({
+                body: "This is a test",
+                author : "butter_bridge",
+                votes : 0,
+                created_at : expect.any(String),
+                comment_id : 19
+            })
+        })
+    })
+    test("400 - All values are missing", () => {
+        return request(app).post("/api/articles/7/comments").send({}).expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Some values are missing");
+        })
+    })
+    test("400 - Some values are missing", () => {
+        return request(app).post("/api/articles/7/comments").send({body: "testing"}).expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Some values are missing");
+        })
+    })
+    test("400 - Incorrect data type passed for article id", () => {
+        return request(app).post("/api/articles/dsadsdas/comments").send({body: "testing"}).expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Bad request");
+        })
+    })
+    test("404 - Article passed was not found", () => {
+        const testBody = {username: "butter_bridge", body: "This is a test"};
+        return request(app).post("/api/articles/99999/comments").send(testBody).expect(404).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Article was not found")
+        })
+    })
+    test("404 - Username passed was not found", () => {
+        const testBody = {username: "dsadsadsadsa", body: "This is a test"};
+        return request(app).post("/api/articles/3/comments").send(testBody).expect(404).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("User was not found")
+        })
+    })
+})
+
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {
         return request(app).get("/api/topicsss").expect(404).then((res) => {

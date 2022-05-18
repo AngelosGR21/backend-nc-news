@@ -7,8 +7,9 @@ const {
     getArticle,
     patchArticle,
     getAllArticles,
-    getCommentsById
 } = require("./controllers/articles")
+
+const {getCommentsById, postComment} = require("./controllers/comments");
 
 const {
     psqlErrorHandler,
@@ -22,6 +23,8 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 app.get("/api/users", getUsers);
 app.get("/api/articles", getAllArticles)
+
+app.post("/api/articles/:article_id/comments", postComment);
 
 app.get("/api/articles/:article_id/comments", getCommentsById)
 app.get("/api/articles/:article_id", getArticle)
