@@ -143,7 +143,7 @@ describe("GET /api/users", () => {
     })
 })
 
-describe.only("GET /api/articles", () => {
+describe("GET /api/articles", () => {
     test("Checking each each article structure", () => {
         return request(app).get("/api/articles").expect(200).then((res) => {
             const {articles} = res.body;
@@ -314,6 +314,26 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
         return request(app).post("/api/articles/3/comments").send(testBody).expect(404).then((res) => {
             const {message} = res.body;
             expect(message).toBe("User was not found")
+        })
+    })
+})
+
+describe("DELETE /api/comments/:comment_id", () => {
+    test("204 - No content, comment was deleted", () => {
+        return request(app).delete("/api/comments/1").expect(204).then((res) => {
+            expect(res.body).toEqual({});
+        })
+    })
+    test("404 - Comment with the id was not found", () => {
+        return request(app).delete("/api/comments/9999999").expect(404).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Comment was not found")
+        })
+    })
+    test("404 - Wrong data type inserted", () => {
+        return request(app).delete("/api/comments/monkey").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid data type (id)")
         })
     })
 })
