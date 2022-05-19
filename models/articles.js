@@ -1,5 +1,5 @@
 const db = require("../db/connection");
-
+const {isTopicAvalable} = require("../db/helpers/utils");
 
 exports.fetchArticle = (id) => {
 
@@ -28,6 +28,7 @@ exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic
     const acceptedOrders = ["ASC", "ascending", "DESC", "descending"];
     const {rows} = await db.query("SELECT slug FROM topics")
     const allTopics = rows.map((row) => row.slug);
+    const isValidDataType = isNaN(parseInt(topic));
 
     const queryValues = [];
     let queryString = `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM comments 
@@ -39,7 +40,7 @@ exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic
     }else if(!topic){
         queryString+= ' GROUP BY articles.article_id'
     }else{
-        if(!isNaN(parseInt(topic))){
+        if(!isValidDataType){
             return Promise.reject({status: 400, message: "Invalid topic data type"});
         }else{
             return Promise.reject({status: 404, message: "Topic was not found"})

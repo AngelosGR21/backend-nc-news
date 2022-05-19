@@ -318,7 +318,6 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
     })
 })
 
-
 describe("GET (inexistent endpoint) ~ Should return error", () => {
     test("/api/topicsss ~ 404", () => {
         return request(app).get("/api/topicsss").expect(404).then((res) => {
