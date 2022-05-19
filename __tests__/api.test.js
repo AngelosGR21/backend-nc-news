@@ -15,6 +15,12 @@ beforeEach(() => {
     return seed(testData);
 })
 
+describe("GET /api", () => {
+    test("checking route's status code", () => {
+        return request(app).get("/api").expect(200)
+    })
+})
+
 describe("GET /api/topics", () => {
     test("Returns an array of topic objects, each with the properties ~ slug and description", () => {
         return request(app).get("/api/topics").expect(200).then((res) => {
