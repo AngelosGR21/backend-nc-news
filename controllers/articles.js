@@ -21,7 +21,7 @@ exports.patchArticle = (req, res, next) => {
 }
 
 exports.getAllArticles = (req, res, next) => {
-    fetchAllArticles().then((articles) => {
+    fetchAllArticles(req.query).then((articles) => {
         res.status(200).send({articles});
     }).catch((err) => {
         next(err);

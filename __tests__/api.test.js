@@ -4,7 +4,7 @@ const app = require("../app")
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index.js");
-
+require('jest-sorted');
 
 afterAll(() => {
    return db.end();
@@ -143,7 +143,7 @@ describe("GET /api/users", () => {
     })
 })
 
-describe("GET /api/articles", () => {
+describe.only("GET /api/articles", () => {
     test("Checking each each article structure", () => {
         return request(app).get("/api/articles").expect(200).then((res) => {
             const {articles} = res.body;
@@ -159,6 +159,77 @@ describe("GET /api/articles", () => {
                     comment_count : expect.any(String),
                 })
             })
+        })
+    })
+    test("Checking that the articles are sorted in descending order based on the date", () => {
+        
+        return request(app).get("/api/articles").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toBeSortedBy("created_at", {descending : true});
+        })
+    })
+    test("200 - Adding 'sort_by' inside the query", () => {
+        return request(app).get("/api/articles?sort_by=comment_count").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toBeSortedBy("comment_count", {descending: true, coerce: true})
+        })
+    })
+    test("200 - Adding 'order' inside the query", () => {
+        return request(app).get("/api/articles?sort_by=votes&order=ASC").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toBeSortedBy("votes");
+        })
+    })
+    test("200 - Adding 'topic' inside the query", () => {
+        return request(app).get("/api/articles?topic=cats").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toHaveLength(1);
+            articles.forEach((article) => {
+                expect(article.topic).toBe("cats");
+            })
+        })
+    })
+    test("200 - Testing complete query", () => {
+        return request(app).get("/api/articles?topic=mitch&sort_by=votes&order=ASC").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toHaveLength(11);
+            expect(articles).toBeSortedBy("votes");
+            articles.forEach((article) => {
+                expect(article.topic).toBe("mitch");
+            })
+        })
+    })
+    test("200 - Topic exists but has no articles", () => {
+        return request(app).get("/api/articles?topic=paper").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toEqual([]);
+        })
+    })
+    test("400 - Setting invalid sort_by value", () => {
+        return request(app).get("/api/articles?sort_by=apples").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid sort_by value");
+        })
+    })
+    test("404 - Setting invalid topic value", () => {
+
+        return request(app).get("/api/articles?topic=apples").expect(404).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Topic was not found");
+        })
+    })
+    test("400 - Invalid topic data type", () => {
+
+        return request(app).get("/api/articles?topic=12312312312").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid topic data type");
+        })
+    })
+    test("400 - Setting invalid order value", () => {
+
+        return request(app).get("/api/articles?order=teaieoada").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid order value");
         })
     })
 })
