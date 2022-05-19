@@ -23,25 +23,31 @@ exports.updateArticle = (id, votes) => {
         })
 }
 
-exports.fetchAllArticles = ({sort_by = "created_at", order, topic}) => {
+exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic}) => {
     const acceptedSorts = ["votes", "title", "created_at", "topic", "author", "created_at", "comment_count"]
+    const acceptedOrders = ["ASC", "ascending", "DESC", "descending"];
+    const {rows} = await db.query("SELECT slug FROM topics")
+    const allTopics = rows.map((row) => row.slug);
+
     const queryValues = [];
     let queryString = `SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM comments 
     RIGHT JOIN articles ON articles.article_id = comments.article_id`
-
-    if(topic){
+    
+    if(allTopics.includes(topic)){
         queryValues.push(topic);
         queryString+= ` WHERE topic = $1 GROUP BY articles.article_id`
-    }else{
+    }else if(!topic){
         queryString+= ' GROUP BY articles.article_id'
+    }else{
+        return Promise.reject({status: 400, message: "Invalid topic value"})
     }
 
     if(acceptedSorts.includes(sort_by)){
         queryString+= ` ORDER BY ${sort_by}`
-        if(order === "ASC"){
-            queryString+= " ASC"
+        if(acceptedOrders.includes(order)){
+            queryString+= ` ${order}`
         }else{
-            queryString+= " DESC"
+            return Promise.reject({status: 400, message: "Invalid order value"});
         }
     }else{
         return Promise.reject({status: 400, message: "Invalid sort_by value"});
@@ -49,9 +55,6 @@ exports.fetchAllArticles = ({sort_by = "created_at", order, topic}) => {
     
     
     return db.query(queryString, queryValues).then(({rows}) => {
-        if(!rows.length){
-            return Promise.reject({status: 400, message: "Invalid topic value"})
-        }
         return rows;
     })
 }

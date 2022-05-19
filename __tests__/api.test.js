@@ -199,6 +199,12 @@ describe("GET /api/articles", () => {
             })
         })
     })
+    test("200 - Topic exists but has no articles", () => {
+        return request(app).get("/api/articles?topic=paper").expect(200).then((res) => {
+            const {articles} = res.body;
+            expect(articles).toEqual([]);
+        })
+    })
     test("400 - Setting invalid sort_by value", () => {
         return request(app).get("/api/articles?sort_by=apples").expect(400).then((res) => {
             const {message} = res.body;
@@ -210,6 +216,13 @@ describe("GET /api/articles", () => {
         return request(app).get("/api/articles?topic=apples").expect(400).then((res) => {
             const {message} = res.body;
             expect(message).toBe("Invalid topic value");
+        })
+    })
+    test("400 - Setting invalid order value", () => {
+
+        return request(app).get("/api/articles?order=teaieoada").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid order value");
         })
     })
 })
