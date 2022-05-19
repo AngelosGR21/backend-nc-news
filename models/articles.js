@@ -39,7 +39,11 @@ exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic
     }else if(!topic){
         queryString+= ' GROUP BY articles.article_id'
     }else{
-        return Promise.reject({status: 400, message: "Invalid topic value"})
+        if(!isNaN(parseInt(topic))){
+            return Promise.reject({status: 400, message: "Invalid topic data type"});
+        }else{
+            return Promise.reject({status: 404, message: "Topic was not found"})
+        }
     }
 
     if(acceptedSorts.includes(sort_by)){

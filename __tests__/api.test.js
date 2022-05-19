@@ -143,7 +143,7 @@ describe("GET /api/users", () => {
     })
 })
 
-describe("GET /api/articles", () => {
+describe.only("GET /api/articles", () => {
     test("Checking each each article structure", () => {
         return request(app).get("/api/articles").expect(200).then((res) => {
             const {articles} = res.body;
@@ -211,11 +211,18 @@ describe("GET /api/articles", () => {
             expect(message).toBe("Invalid sort_by value");
         })
     })
-    test("400 - Setting invalid topic value", () => {
+    test("404 - Setting invalid topic value", () => {
 
-        return request(app).get("/api/articles?topic=apples").expect(400).then((res) => {
+        return request(app).get("/api/articles?topic=apples").expect(404).then((res) => {
             const {message} = res.body;
-            expect(message).toBe("Invalid topic value");
+            expect(message).toBe("Topic was not found");
+        })
+    })
+    test("400 - Invalid topic data type", () => {
+
+        return request(app).get("/api/articles?topic=12312312312").expect(400).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("Invalid topic data type");
         })
     })
     test("400 - Setting invalid order value", () => {
