@@ -24,6 +24,16 @@ const {
 
 app.use(express.json());
 
+app.get("/api", (req, res, next) => {
+    const data = require("./endpoints.json");
+    if(data){
+        res.status(200).send(data);
+    }else{
+        next()
+    }
+    
+})
+
 app.get("/api/topics", getTopics);
 app.get("/api/users", getUsers);
 app.get("/api/articles", getAllArticles)
