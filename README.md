@@ -87,8 +87,8 @@ Below i will provide a brief overview of all the routes available and what they 
 
 5. Now, before you run the tests you need to create <strong>2 .env</strong> files in the root of your folder :
 
-* .env.test
-* .env.development
+    - .env.test
+    - .env.development
 
 6. After you created the <strong>.env</strong> files you need to create these variables to be able to run the tests
     - ***PGDATABASE=nc_news*** (for .env.development)
