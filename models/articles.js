@@ -63,3 +63,28 @@ exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic
         return rows;
     })
 }
+
+exports.fetchCommentsByArticleId = (id) => {
+    return db.query('SELECT * FROM comments WHERE article_id = $1', [id]).then((res) => {
+        if(!res.rowCount){
+            return this.fetchArticle(id)
+        }else{
+            return res.rows
+        }
+    }).then((res) => {
+        if(Array.isArray(res)){
+            return res;
+        }else{
+            return [];
+        }
+    })
+}
+
+exports.insertCommentOnArticleId = (id, reqBody) => {
+    const {username, body} = reqBody;
+    const comment = [id, body, username]
+    return db.query(`INSERT INTO comments (article_id, body, author) 
+    VALUES ($1, $2, $3) RETURNING *`, comment).then((res) => {
+        return res.rows[0]
+    });
+}
