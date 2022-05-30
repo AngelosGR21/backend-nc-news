@@ -1,25 +1,16 @@
 const express = require("express")
 const app = express();
 
-const { getUsers } = require("./controllers/users");
-const { getTopics } = require("./controllers/topics");
-const { 
-    getArticle,
-    patchArticle,
-    getAllArticles,
-} = require("./controllers/articles")
-
-const {
-    getCommentsById,
-    postComment,
-    deleteComment
-} = require("./controllers/comments");
+const articleRouter = require("./routers/articleRouter");
+const topicsRouter = require("./routers/topicsRouter");
+const commentsRouter = require("./routers/commentsRouter");
+const usersRouter = require("./routers/usersRouter");
 
 const {
     psqlErrorHandler,
     customErrorHandler,
     serverErrorHandler
- } = require("./errors/");
+ } = require("./errors");
 
 
 app.use(express.json());
@@ -33,18 +24,10 @@ app.get("/api", (req, res, next) => {
     }
     
 })
-
-app.get("/api/topics", getTopics);
-app.get("/api/users", getUsers);
-app.get("/api/articles", getAllArticles)
-
-app.post("/api/articles/:article_id/comments", postComment);
-
-app.get("/api/articles/:article_id/comments", getCommentsById)
-app.get("/api/articles/:article_id", getArticle)
-app.patch("/api/articles/:article_id", patchArticle)
-
-app.delete("/api/comments/:comment_id", deleteComment)
+app.use("/api/articles", articleRouter);
+app.use("/api/topics", topicsRouter)
+app.use("/api/users", usersRouter)
+app.use("/api/comments", commentsRouter)
 
 app.use("*", (req, res) => {
     res.status(404).send({message: "Endpoint not found"})
