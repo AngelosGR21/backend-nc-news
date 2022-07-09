@@ -65,7 +65,7 @@ exports.fetchAllArticles = async ({sort_by = "created_at", order = "DESC", topic
 }
 
 exports.fetchCommentsByArticleId = (id) => {
-    return db.query('SELECT * FROM comments WHERE article_id = $1', [id]).then((res) => {
+    return db.query('SELECT comments.*, users.avatar_url FROM comments JOIN users ON comments.author = users.username WHERE article_id = $1', [id]).then((res) => {
         if(!res.rowCount){
             return this.fetchArticle(id)
         }else{
