@@ -16,3 +16,15 @@ exports.removeComment = async (id) => {
     }
     
 }
+
+exports.updateCommentVotes = (id, updatedVote) => {
+    if(updatedVote !== 1 && updatedVote !== -1 )return Promise.reject({status: 400, message: "inc_votes can only be 1 or -1"}) ;
+    const queryString = "UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *"
+    const queryValues = [updatedVote, id]
+    return db.query(queryString, queryValues).then((res) => {
+        if(!res.rowCount){
+            return Promise.reject({status : 404, message : "Comment was not found"})
+        }
+        return res.rows[0];
+    })
+}
