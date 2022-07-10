@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const {isTopicAvalable} = require("../db/helpers/utils");
 
 exports.fetchArticle = (id) => {
 
