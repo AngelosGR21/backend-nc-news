@@ -149,7 +149,7 @@ describe("GET /api/users", () => {
     })
 })
 
-describe("GET /api/users/:username", () => {
+describe("GET /api/users/:username && Testing error handling", () => {
     test("200 - Returns a user object when the username exists", () => {
         return request(app).get("/api/users/butter_bridge").expect(200).then((res) => {
             const {user} = res.body;
@@ -340,6 +340,45 @@ describe("POST /api/articles/:article_id/comments && Testing error handling", ()
             const {message} = res.body;
             expect(message).toBe("User was not found")
         })
+    })
+})
+
+describe("PATCH /api/comments/:comment_id && Testing error handling", () => {
+    test("200 - Increments the total number of votes", () => {
+        const votes = {inc_votes: 1}
+        return request(app).patch("/api/comments/1").send(votes).then((res) => {
+            const {updatedComment} = res.body;
+            expect(updatedComment).toMatchObject({
+                comment_id: 1,
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                article_id: 9,
+                author: 'butter_bridge',
+                votes: 17,
+                created_at: '2020-04-06T12:17:00.000Z'
+            })
+        })
+    } )
+
+    test("200 - Decrements the total number of votes", () => {
+        const votes = {inc_votes: -1}
+        return request(app).patch("/api/comments/1").send(votes).then((res) => {
+            const {updatedComment} = res.body;
+            expect(updatedComment).toMatchObject({
+                comment_id: 1,
+                body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+                article_id: 9,
+                author: 'butter_bridge',
+                votes: 15,
+                created_at: '2020-04-06T12:17:00.000Z'
+            })
+        })
+    })
+    test("400 - value of property inc_votes is invalid", () => {
+        const votes = {inc_votes : -15}
+        return request(app).patch("/api/comments/1").send(votes).then((res) => {
+            const {message} = res.body;
+            expect(message).toBe("inc_votes can only be 1 or -1");
+        });
     })
 })
 
