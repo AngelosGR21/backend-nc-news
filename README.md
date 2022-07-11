@@ -38,7 +38,7 @@ Below i will provide a brief overview of all the routes available and what they 
 <br>
 <li><strong>/api/articles ----></strong> Returns the created article. <strong style="color: red">Fields required >></strong> author: String -> <strong>Needs to be the username from the users table</strong>, title: String, body: String, (topic: String -> <strong>Needs to be the slug from the topics table</strong>)</li>
 <br>
-<li><strong>/api/articles/:article_id/comments ----></strong> Returns the created comment on the article given. <strong style="color: red">Fields required >></strong> username: String -> <strong>Needs to be the username from the users table</strong>, body: String <strong style="color: orange">|| Coming soon</strong></li>
+<li><strong>/api/articles/:article_id/comments ----></strong> Returns the created comment on the article given. <strong style="color: red">Fields required >></strong> username: String -> <strong>Needs to be the username from the users table</strong>, body: String</li>
 <br>
 </ul>
 </details>
