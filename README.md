@@ -16,7 +16,7 @@ Below i will provide a brief overview of all the routes available and what they 
     <br>
     <li><strong>/api/users ----></strong> Returns an array of objects of all the users available</li>
     <br>
-    <li><strong>/api/users/:username ----></strong> Returns an object with the details of the user found <strong style="color: orange">|| Coming soon</strong></li>
+    <li><strong>/api/users/:username ----></strong> Returns an object with the details of the user found</li>
     <br>
     <li><strong>/api/topics ----></strong> Returns an array of objects of all the topics available</li>
     <br>
@@ -48,7 +48,7 @@ Below i will provide a brief overview of all the routes available and what they 
 <br>
 <li><strong>/api/articles/:article_id ----></strong> Returns the updated article. <strong style="color: red">Fields required >></strong> inc_votes : Number (It will increment the votes, but if you pass a negative number it will subtract)</li>
 <br>
-<li><strong>/api/comments/:comment_id ----></strong> Returns the updated comment. <strong style="color: red">Fields required >></strong> inc_votes : Number (It will increment the votes, but if you pass a negative number it will subtract) <strong style="color: orange">|| Coming soon</strong></li>
+<li><strong>/api/comments/:comment_id ----></strong> Returns the updated comment. <strong style="color: red">Fields required >></strong> inc_votes : Number (It will increment the votes, but if you pass a negative number it will subtract)</li>
 <br>
 </ul>
 </details>
