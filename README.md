@@ -1,14 +1,15 @@
 # Northcoders News API
 
 ## **Live Link : https://nc-news-project-nc.herokuapp.com/api/**
+
 ---
 
 ## **Summary**
 
 This API mimics the build of a real world backend service that contains different articles, topics, comments and users. It provides full CRUD functionality and was built using TDD with **[Jest](https://www.npmjs.com/package/jest)** as the testing framework.  
-The main backend framework used for the routes is **[Express](https://www.npmjs.com/package/express)** and for the database PSQL which was installed using the **[PG](https://www.npmjs.com/package/pg)** npm package.  
+The main backend framework used for the routes is **[Express](https://www.npmjs.com/package/express)** and for the database PSQL which was installed using the **[PG](https://www.npmjs.com/package/pg)** npm package.
 
-Below i will provide a brief overview of all the routes available and what they do. *( The endpoints are also available to see in JSON format in the file of this directory "endpoints.json" or you can view them live here : **[View endpoints](https://nc-news-project-nc.herokuapp.com/api/)** )*
+Below i will provide a brief overview of all the routes available and what they do. _( The endpoints are also available to see in JSON format in the file of this directory "endpoints.json" or you can view them live here : **[View endpoints](https://nc-news-project-nc.herokuapp.com/api/)** )_
 
 <details>
 <summary><strong>GET routes</strong></summary>
@@ -64,7 +65,8 @@ Below i will provide a brief overview of all the routes available and what they 
 </details>
 <br>
 
-*You can also see all the additional packages used for the API beneath*
+_You can also see all the additional packages used for the API beneath_
+
 - [dotenv](https://www.npmjs.com/package/dotenv)
 - [jest-extended](https://www.npmjs.com/package/jest-extended)
 - [jest-sorted](https://www.npmjs.com/package/jest-sorted)
@@ -73,32 +75,32 @@ Below i will provide a brief overview of all the routes available and what they 
 - [husky](https://www.npmjs.com/package/husky)
 
 ---
+
 ## Setup
 
 **To run this app in your local machine please follow the next steps**
 
-1. In your terminal paste this command >> ``` git clone https://github.com/AngelosGR21/BC-News-Project-Northcoders-.git ``` to clone the repository in your system.
-  
-2. Make sure you run ``` npm install ``` to install all dependencies needed.
-3. After all dependencies have been installed run the command ``` npm run setup-dbs ``` to create the databases.  
-4. Next to seed the databases run :
-    - ``` npm run seed ``` for the development data
-    - ``` npm run seedTestData ``` for the test data
+1.  In your terminal paste this command >> `git clone https://github.com/AngelosGR21/BC-News-Project-Northcoders-.git` to clone the repository in your system.
 
-5. Now, before you run the tests you need to create <strong>2 .env</strong> files in the root of your folder :
+2.  Make sure you run `npm install` to install all dependencies needed.
+3.  After all dependencies have been installed run the command `npm run setup-dbs` to create the databases.
+4.  Next to seed the databases run :
 
-    - .env.test
-    - .env.development
+    - `npm run seed` for the development data
+    - `npm run seedTestData` for the test data
 
-6. After you created the <strong>.env</strong> files you need to create these variables to be able to run the tests
-    - ***PGDATABASE=nc_news*** (for .env.development)
-    - ***PGDATABASE=nc_news_test*** (for .env.test)
-##  
+5.  Before you run the tests you need to create a <strong>.env</strong> file in the root of your project
+
+6.  After you created the <strong>.env</strong> file you need to update it with the variables from .env-example
+
+##
+
 7. You're all set, all that's left is to run the tests!
-    - ``` npm test ```
+   - `npm test`
+
 ---
 
 ## Minimum Versions Needed
 
-* Node : 17.6.0
-* PSQL : 12.10
+- Node : 17.6.0
+- PSQL : 12.10

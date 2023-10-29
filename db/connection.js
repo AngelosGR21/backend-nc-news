@@ -1,21 +1,20 @@
 const { Pool } = require('pg');
-const ENV = process.env.NODE_ENV || 'development';
+require('dotenv').config();
 
-const productionObj = {
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+const connectionObj = {
+  user: process.env.DBUSER,
+  host: process.env.DBHOST,
+  database: process.env.DBNAME,
+  password: process.env.DBPASSWORD,
+};
+
+if (
+  !process.env.DBUSER &&
+  !process.env.DBHOST &&
+  !process.env.DBNAME &&
+  !process.env.DBPASSWORD
+) {
+  throw new Error('Configuration credentials are missing');
 }
-const config = ENV === "production" ? productionObj : {};
 
-
-require('dotenv').config({
-  path: `${__dirname}/../.env.${ENV}`,
-});
-
-if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
-  throw new Error('PGDATABASE or DATABASE_URL not set');
-}
-
-module.exports = new Pool(config);
+module.exports = new Pool(connectionObj);
