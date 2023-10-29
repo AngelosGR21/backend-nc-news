@@ -9,9 +9,8 @@
     "seedTestData": "node ./db/seeds/seedTD.js",
     "test": "jest",
     "prepare": "husky install",
-    "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed",
     "start": "node listen.js",
-    "start-dev": "nodemon listen.js"
+    "dev": "nodemon listen.js"
   },
   "repository": {
     "type": "git",
